@@ -1,0 +1,20 @@
+{
+  "name": "dicenode",
+  "version": "1.0.0",
+  "description": "dice sim ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "devrim",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^4.4.4",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.21.0",
+    "jquery": "^3.7.1",
+    "nodemon": "^3.1.7",
+    "spectre.css": "^0.5.9"
+  }
+}
