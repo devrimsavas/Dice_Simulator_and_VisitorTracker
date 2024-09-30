@@ -1,5 +1,6 @@
 $(document).ready(() => {
   let diceChart;
+  let base_url = window.location;
 
   $("#simulateButton").on("click", () => {
     const diceFaces = parseInt($("#diceFaces").val()) || 6;
@@ -7,7 +8,7 @@ $(document).ready(() => {
 
     // AJAX request to send the data to the backend
     $.ajax({
-      url: "http://localhost:3000/", // Backend URL
+      url: base_url.origin + "/", // Backend URL
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify({ diceFaces, rollTimes }),
