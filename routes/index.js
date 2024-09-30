@@ -15,6 +15,21 @@ router.get("/", (req, res) => {
     console.log(`returning user id : ${req.cookies.userId}`);
   }
 
+  const ip =
+    req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  const userAgent = req.headers["user-agent"];
+  const language = req.headers["accept-language"];
+  const referer = req.headers["referer"] || "Direct";
+
+  const userBackEndInfo = {
+    userIp: ip,
+    userAgent: userAgent,
+    language: language,
+    referer: referer,
+  };
+
+  console.log(userBackEndInfo);
+
   res.sendFile(path.join(__dirname, "../views/index.html"));
 });
 

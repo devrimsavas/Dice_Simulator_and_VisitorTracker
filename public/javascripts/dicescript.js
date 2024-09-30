@@ -13,7 +13,7 @@ $(document).ready(() => {
       contentType: "application/json",
       data: JSON.stringify({ diceFaces, rollTimes }),
       success: (response) => {
-        console.log("Response from server:", response);
+        //console.log("Response from server:", response);
 
         // Clear the results table before populating
         const resultsTable = $("#resultsTable");
