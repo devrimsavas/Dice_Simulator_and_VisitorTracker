@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs");
 var path = require("path");
+var connectDB = require("../config/connectDatabase");
+const { ObjectId } = require("mongodb");
 
 //get
 router.get("/", (req, res) => {
@@ -48,7 +50,7 @@ router.post("/", (req, res, next) => {
 
 //get info
 // Route to handle frontend user data collection
-router.post("/user-info", (req, res) => {
+router.post("/user-info", async (req, res) => {
   const userInfo = req.body;
   const userId = req.cookies.userId || "unknown";
 
@@ -77,8 +79,16 @@ router.post("/user-info", (req, res) => {
 
   // Example: Save this data to a database (you can add your database logic here)
   // db.collection('user_visits').insertOne(combinedUserInfo);
-
-  res.status(200).send("User info received and logged.");
+  try {
+    const db = await connectDB();
+    //insert
+    await db.collection("collectedinfo").insertOne({ combinedUserInfo });
+    res.status(200).send("User info received and logged.");
+  } catch (error) {
+    res.status(500).json({
+      error: "internal server Error",
+    });
+  }
 });
 
 module.exports = router;

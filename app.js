@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
@@ -5,6 +7,11 @@ var PORT = 3000;
 var cors = require("cors");
 
 var indexRouter = require("./routes/index.js");
+
+//connect database
+const connectDB = require("./config/connectDatabase");
+
+connectDB();
 var app = express();
 
 app.use(cors());
