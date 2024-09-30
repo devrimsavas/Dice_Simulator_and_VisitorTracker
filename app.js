@@ -2,9 +2,12 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var PORT = 3000;
+var cors = require("cors");
 
 var indexRouter = require("./routes/index.js");
 var app = express();
+
+app.use(cors());
 
 //path
 app.set("views", path.join(__dirname, "views"));
