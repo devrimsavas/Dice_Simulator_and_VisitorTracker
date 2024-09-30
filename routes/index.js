@@ -7,29 +7,16 @@ var path = require("path");
 router.get("/", (req, res) => {
   const title = "title";
 
+  // Check if user has a cookie, if not, set one
   if (!req.cookies.userId) {
     const uniqueUserId = Date.now();
-    res.cookie("userId", uniqueUserId, { httpOnly: false });
-    console.log(`new user id ${req.cookies.userId}`);
+    res.cookie("userId", uniqueUserId, { httpOnly: true }); // Set user cookie
+    console.log(`New user ID: ${uniqueUserId}`);
   } else {
-    console.log(`returning user id : ${req.cookies.userId}`);
+    console.log(`Returning user ID: ${req.cookies.userId}`);
   }
 
-  const ip =
-    req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-  const userAgent = req.headers["user-agent"];
-  const language = req.headers["accept-language"];
-  const referer = req.headers["referer"] || "Direct";
-
-  const userBackEndInfo = {
-    userIp: ip,
-    userAgent: userAgent,
-    language: language,
-    referer: referer,
-  };
-
-  console.log(userBackEndInfo);
-
+  // Serve the index.html file
   res.sendFile(path.join(__dirname, "../views/index.html"));
 });
 
@@ -65,11 +52,33 @@ router.post("/user-info", (req, res) => {
   const userInfo = req.body;
   const userId = req.cookies.userId || "unknown";
 
-  // Log user information and cookie ID
-  console.log(`User ID: ${userId}`);
-  console.log("User info received:", userInfo);
+  // Collect IP, user agent, language, and referer from backend
+  let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  if (ip === "::1") {
+    ip = "127.0.0.1"; // Handle local IPv6 loopback
+  }
+  const userAgent = req.headers["user-agent"];
+  const language = req.headers["accept-language"];
+  const referer = req.headers["referer"] || "Direct";
 
-  res.status(200).send("User info received");
+  const userBackEndInfo = {
+    userId: userId,
+    userIp: ip,
+    userAgent: userAgent,
+    language: language,
+    referer: referer,
+  };
+
+  // Combine frontend and backend info into one object
+  const combinedUserInfo = { ...userInfo, ...userBackEndInfo };
+
+  // Log the combined user information
+  console.log("Combined user info:", combinedUserInfo);
+
+  // Example: Save this data to a database (you can add your database logic here)
+  // db.collection('user_visits').insertOne(combinedUserInfo);
+
+  res.status(200).send("User info received and logged.");
 });
 
 module.exports = router;
